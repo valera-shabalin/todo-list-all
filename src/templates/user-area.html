@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+	<!-- Meta tags -->
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- Project title -->
+	<title>Document</title>
+	<!-- Bootstrap 4 -->
+	<link rel="stylesheet" href="css/bootstrap-grid.min.css">
+	<!-- Main CSS style -->
+	<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+	
+	<!-- Start project -->
+
+	<div id="app">
+
+		<div class="modal-window">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-8">
+						<!-- <div class="modal-window__form">
+							<a href="#" class="close">Закрыть</a>
+							<h2>Вы уверены что хотите удалить дело “Заправить машину”?</h2>
+							<a href="#" class="btn btn_red">Да, удалить</a>
+							<a href="#" class="btn btn_blue">Нет, я передумал</a>
+						</div> -->
+						<div class="modal-window__form">
+							<a href="#" class="close">Закрыть</a>
+							<h2>Новая подзадача</h2>
+							<form>
+								<input type="text" class="default-input" placeholder="Название новой подзадачи">
+								<input type="submit" class="btn btn_blue" value="Добавить">
+							</form>
+						</div>
+						<!-- <div class="modal-window__form">
+							<a href="#" class="close">Закрыть</a>
+							<h2>Ошибка: неудалось создать подзадачу</h2>
+						</div> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="user-menu">
+			<nav class="user-menu__nav">
+				<a href="#" class="user-menu__link btn btn_blue">Редактировать профиль</a>
+				<a href="#" class="user-menu__link btn btn_red">Выйти</a>
+			</nav>
+		</div>
+
+		<header class="header">
+			<div class="container-fluid">
+				<div class="row align-items-center">
+					<div class="col-6">
+						<div class="header__logo">
+							<span class="logo">Todo</span>
+						</div>
+					</div>
+					<div class="col-6 d-flex justify-content-end">
+						<div class="header__humb">
+							<span></span>
+							<span></span>
+							<span></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+		<section class="user-settings">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-lg-6">
+						<h1>Ваш профиль</h1>
+						<form>
+							<input type="text" class="default-input" placeholder="Ваше имя" value="Валерий">
+							<input type="text" class="default-input" placeholder="Ваша фамилия" value="Шабалин">
+							<input type="text" class="default-input" placeholder="Ваш город">
+							<input type="text" class="default-input" placeholder="Ваш адрес электронной почты" value="shabalinvalera.ts@gmail.com">
+							<input type="submit" class="btn btn_blue" value="Сохранить">
+						</form>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	</div>
+
+	<!-- End project -->
+
+	<!-- Scripts -->
+	<script src="js/main.js"></script>
+
+</body>
+</html>
