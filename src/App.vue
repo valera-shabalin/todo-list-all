@@ -7,30 +7,36 @@
 </template>
 
 <script>
-import EmptyLayout from '@/layouts/EmptyLayout'
-import MainLayout from '@/layouts/MainLayout'
-export default {
-	computed: {
-		layout() {
-			return (this.$route.meta.layout || 'empty') + '-layout'
+	import EmptyLayout from '@/layouts/EmptyLayout'
+	import MainLayout from '@/layouts/MainLayout'
+	export default {
+		computed: {
+			layout() {
+				return (this.$route.meta.layout || 'empty') + '-layout'
+			}
+		},
+		components: {
+			EmptyLayout, MainLayout
 		}
-	},
-	components: {
-		EmptyLayout, MainLayout
 	}
-}
 </script>
 
 <style lang="sass">
-@import 'assets/css/style.css'
-@import 'assets/css/bootstrap-grid.min.css'
-.header .header__date 
-	margin-left: 20px
-	font-family: 'Montserrat-Medium', sans-serif
+	@import 'assets/css/style.css'
+	@import 'assets/css/bootstrap-grid.min.css'
+	.header .header__date 
+		margin-left: 20px
+		font-family: 'Montserrat-Medium', sans-serif
 
-@media (max-width: 480px)
-	.header
-		&__date
-			font-size: 12px
+	.form-body
+		form 
+			input.invalid
+				border: 1px solid #FC5C65
+			span 
+				text-align: center
 
+	@media (max-width: 480px)
+		.header
+			&__date
+				font-size: 12px
 </style>
