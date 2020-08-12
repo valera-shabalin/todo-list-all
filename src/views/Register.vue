@@ -84,7 +84,7 @@
 		    surname: { required }
 	    },
 		methods: {
-			onSubmit() {
+			async onSubmit() {
 				if ( this.$v.$invalid ) {
 			    	this.$v.$touch()
 			       	return
@@ -95,8 +95,10 @@
 			    	name: this.name,
 			    	surname: this.surname
 			    }
-			    console.log(formData)
-				this.$router.push('/')
+			   	try {
+			   		 await this.$store.dispatch('register', formData)
+					this.$router.push('/')
+			   	} catch(e) {}
 			}
 		}
 	}

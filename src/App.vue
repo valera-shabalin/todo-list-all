@@ -25,7 +25,7 @@
 	@import 'assets/css/style.css'
 	@import 'assets/css/bootstrap-grid.min.css'
 	.header .header__date 
-		margin-left: 20px
+		margin-left: 5px
 		font-family: 'Montserrat-Medium', sans-serif
 
 	.form-body
