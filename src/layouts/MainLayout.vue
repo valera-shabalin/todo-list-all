@@ -1,8 +1,8 @@
 <template>
 	<div>
-		<UserMenu v-model="isOpen" />
+		<UserMenu v-model="userMenuOpen" />
 
-		<Header @click="isOpen = !isOpen" v-model="isOpen" />
+		<Header @click="userMenuOpen = !userMenuOpen" v-model="userMenuOpen" />
 
 		<router-view />
 
@@ -15,7 +15,7 @@ import UserMenu from '@/components/app/UserMenu.vue'
 export default {
 	name: 'MainLayout',
 	data: () => ({
-		isOpen: false
+		userMenuOpen: false
 	}),
 	components: {
 		Header, UserMenu

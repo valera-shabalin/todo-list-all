@@ -24,4 +24,13 @@ export default {
 <style lang="sass">
 @import 'assets/css/style.css'
 @import 'assets/css/bootstrap-grid.min.css'
+.header .header__date 
+	margin-left: 20px
+	font-family: 'Montserrat-Medium', sans-serif
+
+@media (max-width: 480px)
+	.header
+		&__date
+			font-size: 12px
+
 </style>

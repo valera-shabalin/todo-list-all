@@ -2,12 +2,15 @@
 	<header class="header">
 		<div class="container-fluid">
 			<div class="row align-items-center">
-				<div class="col-6">
+				<div class="col-10 d-flex align-items-center">
 					<div class="header__logo">
 						<span class="logo">Todo</span>
 					</div>
+					<div class="header__date">
+						<span> - {{ date | date('date') }}</span>
+					</div>
 				</div>
-				<div class="col-6 d-flex justify-content-end">
+				<div class="col-2 d-flex justify-content-end">
 					<div class="header__humb" :class="{js_open: value}" @click="$emit('click')">
 						<span></span>
 						<span></span>
@@ -22,6 +25,18 @@
 <script>
 	export default {
 		name: 'Header',
-		props: ['value']
+		props: ['value'],
+		data: () => ({
+			interval: null,
+			date: new Date()
+		}),
+		mounted() {
+			this.interval = setInterval(() => {
+				this.date = new Date()
+			}, 1000)
+		},
+		beforeDestroy() {
+			clearInterval(this.interval)
+		}
 	}
 </script>
