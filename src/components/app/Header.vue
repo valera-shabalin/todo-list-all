@@ -28,12 +28,13 @@
 		props: ['value'],
 		data: () => ({
 			interval: null,
-			date: new Date()
+			date: new Date(),
+			timeInterval: 360000
 		}),
 		mounted() {
 			this.interval = setInterval(() => {
 				this.date = new Date()
-			}, 1000)
+			}, this.timeInterval)
 		},
 		beforeDestroy() {
 			clearInterval(this.interval)

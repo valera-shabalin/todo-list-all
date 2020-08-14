@@ -5,14 +5,14 @@
 				<form @submit.prevent="onSubmit">
 					<span class="logo">Todo</span>
 					<input 
-						type="text" 
+						type="email" 
 						class="default-input user-email" 
 						placeholder="Ваш адрес электронной почты" 
 						v-model.trim="email" 
 						:class="{ invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email) }" 
 					/>
 					<input 
-						type="text" 
+						type="password" 
 						class="default-input" 
 						placeholder="Ваш пароль"
 						v-model.trim="password" 
