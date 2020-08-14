@@ -9,14 +9,14 @@
 						class="default-input" 
 						placeholder="Ваше имя"
 						v-model.trim="name"
-						:class="{ invalid: ($v.name.$dirty && !$v.name.required) }"
+						:class="{ invalid: ($v.name.$dirty && !$v.name.required) || ($v.name.$dirty && !$v.password.minLength) }"
 					/>
 					<input 
 						type="text" 
 						class="default-input" 
 						placeholder="Ваша фамилия"
 						v-model.trim="surname"
-						:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) }"
+						:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
 					/>
 					<input 
 						type="text" 
@@ -46,8 +46,16 @@
 					>Введите ваше имя</span>
 					<span 
 						class="error"
+						v-else-if="$v.name.$dirty && !$v.name.minLength"
+					>Минимальная длина имени - {{ $v.surname.$params.minLength.min }}</span>
+					<span 
+						class="error"
 						v-if="$v.surname.$dirty && !$v.surname.required"
 					>Введите вашу фамилию</span>
+					<span 
+						class="error"
+						v-else-if="$v.surname.$dirty && !$v.surname.minLength"
+					>Минимальная длина фамилии - {{ $v.surname.$params.minLength.min }}</span>
 					<span 
 						class="error"
 						v-if="$v.email.$dirty && !$v.email.required"
@@ -97,8 +105,8 @@
 		    email: { email, required },
 		    password: { required, minLength: minLength(10) },
 		    repeatPassword: { required, sameAsPassword: sameAs('password') },
-		    name: { required },
-		    surname: { required }
+		    name: { required, minLength: minLength(3) },
+		    surname: { required, minLength: minLength(3) }
 	    },
 		methods: {
 			async onSubmit() {
