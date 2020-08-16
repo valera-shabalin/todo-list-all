@@ -12,6 +12,7 @@
 <script>
 import Header from '@/components/app/Header.vue'
 import UserMenu from '@/components/app/UserMenu.vue'
+
 export default {
 	name: 'MainLayout',
 	data: () => ({
