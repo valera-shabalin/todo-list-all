@@ -28,12 +28,11 @@
 		margin-left: 5px
 		font-family: 'Montserrat-Medium', sans-serif
 
-	.form-body
-		form 
-			input.invalid
-				border: 1px solid #FC5C65
-			span 
-				text-align: center
+	form 
+		input.invalid
+			border: 1px solid #FC5C65
+		span 
+			text-align: center
 
 	@media (max-width: 480px)
 		.header

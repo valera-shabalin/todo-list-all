@@ -12,18 +12,28 @@
 				</div>
 			</div>
 		</section>
-		<Footer />
+		<Footer @created="AddNewList"/>
 	</div>
 </template>
 
 <script>
-import TodoList from '@/components/app/TodoList.vue'
-import Affairs from '@/components/app/Affairs.vue'
-import Footer from '@/components/app/Footer.vue'
-export default {
-	name: 'Home',
-	components: {
-		TodoList, Affairs, Footer
+	import TodoList from '@/components/app/TodoList.vue'
+	import Affairs from '@/components/app/Affairs.vue'
+	import Footer from '@/components/app/Footer.vue'
+	
+	export default {
+		name: 'Home',
+		data: () => ({
+			lists: []
+		}),
+		components: {
+			TodoList, Affairs, Footer
+		},
+		methods: {
+			AddNewList(list) {
+				this.lists.push(list)
+				console.log(this.lists)
+			}
+		}
 	}
-}
 </script>
