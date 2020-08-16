@@ -4,7 +4,7 @@
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-4 col-sm-5 d-none d-sm-block">
-						<TodoList  />
+						<TodoList :lists="lists"/>
 					</div>
 					<div class="col-md-8 col-sm-7">
 						<Affairs />
@@ -15,6 +15,8 @@
 		<Footer @created="AddNewList"/>
 	</div>
 </template>
+
+<!-- TODO -->
 
 <script>
 	import TodoList from '@/components/app/TodoList.vue'
@@ -29,10 +31,13 @@
 		components: {
 			TodoList, Affairs, Footer
 		},
+		async mounted() {
+			this.lists = await this.$store.dispatch('fetchLists')
+		},
 		methods: {
 			AddNewList(list) {
 				this.lists.push(list)
-				console.log(this.lists)
+				alert('Список дел добавлен!')
 			}
 		}
 	}

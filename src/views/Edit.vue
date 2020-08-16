@@ -4,11 +4,23 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-6">
 					<h1>Ваш профиль</h1>
-					<form>
-						<input type="text" class="default-input" placeholder="Ваше имя" value="Валерий">
-						<input type="text" class="default-input" placeholder="Ваша фамилия" value="Шабалин">
-						<input type="text" class="default-input" placeholder="Ваш город">
-						<input type="text" class="default-input" placeholder="Ваш адрес электронной почты" value="shabalinvalera.ts@gmail.com">
+					<form @submit.prevent="changeInfo">
+						<input 
+							type="name" 
+							class="default-input" 
+							placeholder="Ваше имя" 
+							value="Валерий"
+							v-model.trim="name"
+							:class="{ invalid: ($v.name.$dirty && !$v.name.required) || ($v.name.$dirty && !$v.name.minLength) }"
+						/>
+						<input 
+							type="surname" 
+							class="default-input" 
+							placeholder="Ваша фамилия"
+							value="Шабалин"
+							v-model.trim="surname"
+							:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
+						/>
 						<input type="submit" class="btn btn_blue" value="Сохранить">
 					</form>
 				</div>
@@ -16,3 +28,40 @@
 		</div>
 	</section>
 </template>
+
+<script>
+	import { required, minLength } from 'vuelidate/lib/validators'
+
+	export default {
+		name: 'Edit',
+		data: () => ({
+			name: '',
+			surname: ''
+		}),
+		validations: {
+			name: { required, minLength: minLength(3) },
+			surname: { required, minLength: minLength(3) },
+		},
+		async mounted() {
+			const user = await this.$store.dispatch('getInfo')
+			this.name = user.name
+			this.surname = user.surname
+		},
+		methods: {
+			async changeInfo() {
+				if ( this.$v.$invalid ) {
+			    	this.$v.$touch()
+			       	return
+			    }
+			    const user = {
+			    	name: this.name,
+			    	surname: this.surname
+			    }
+			    try {
+			    	await this.$store.dispatch('updateInfo', user)
+			    	alert('Изменения сохранены!')
+			    } catch(e) {}
+			}
+		}
+	}
+</script>

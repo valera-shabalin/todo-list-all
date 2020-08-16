@@ -38,6 +38,8 @@
 	</footer>
 </template>
 
+<!-- TODO -->
+
 <script>
 	import { required } from 'vuelidate/lib/validators'
 
@@ -56,7 +58,7 @@
 					return
 				}
 				try {
-					const list = await this.$store.dispatch('createList', { title: this.listTitle })
+					const list = await this.$store.dispatch('createList', { title: this.listTitle, progress: 0 })
 					this.listTitle = ''
 					this.$v.$reset()
 					this.$emit('created', list)
