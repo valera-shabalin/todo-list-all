@@ -1,5 +1,6 @@
 <template>
 	<div>
+
 		<UserMenu v-model="userMenuOpen" />
 
 		<Header @click="userMenuOpen = !userMenuOpen" v-model="userMenuOpen" />
@@ -10,16 +11,16 @@
 </template>
 
 <script>
-import Header from '@/components/app/Header.vue'
-import UserMenu from '@/components/app/UserMenu.vue'
+	import Header from '@/components/app/Header.vue'
+	import UserMenu from '@/components/app/UserMenu.vue'
 
-export default {
-	name: 'MainLayout',
-	data: () => ({
-		userMenuOpen: false
-	}),
-	components: {
-		Header, UserMenu
+	export default {
+		name: 'MainLayout',
+		data: () => ({
+			userMenuOpen: false
+		}),
+		components: {
+			Header, UserMenu
+		}
 	}
-}
 </script>

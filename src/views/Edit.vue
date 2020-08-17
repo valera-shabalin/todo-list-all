@@ -9,7 +9,6 @@
 							type="name" 
 							class="default-input" 
 							placeholder="Ваше имя" 
-							value="Валерий"
 							v-model.trim="name"
 							:class="{ invalid: ($v.name.$dirty && !$v.name.required) || ($v.name.$dirty && !$v.name.minLength) }"
 						/>
@@ -17,7 +16,6 @@
 							type="surname" 
 							class="default-input" 
 							placeholder="Ваша фамилия"
-							value="Шабалин"
 							v-model.trim="surname"
 							:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
 						/>
@@ -30,7 +28,8 @@
 </template>
 
 <script>
-	import { required, minLength } from 'vuelidate/lib/validators'
+	import { required, minLength, email } from 'vuelidate/lib/validators'
+	import firebase from 'firebase/app'
 
 	export default {
 		name: 'Edit',
@@ -40,12 +39,12 @@
 		}),
 		validations: {
 			name: { required, minLength: minLength(3) },
-			surname: { required, minLength: minLength(3) },
+			surname: { required, minLength: minLength(3) }
 		},
 		async mounted() {
-			const user = await this.$store.dispatch('getInfo')
-			this.name = user.name
-			this.surname = user.surname
+			const info = await this.$store.dispatch('getInfo')
+			this.name = info.name
+			this.surname = info.surname
 		},
 		methods: {
 			async changeInfo() {

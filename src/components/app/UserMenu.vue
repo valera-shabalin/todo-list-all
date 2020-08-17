@@ -1,6 +1,9 @@
 <template>
 	<div class="user-menu" :class="{js_open: value}">
 		<nav class="user-menu__nav">
+			<router-link to="/" class="user-menu__link btn btn_green">
+				На главную
+			</router-link>
 			<router-link to="/edit" class="user-menu__link btn btn_blue">
 				Редактировать профиль
 			</router-link>
