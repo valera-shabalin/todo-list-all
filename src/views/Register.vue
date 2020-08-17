@@ -92,6 +92,7 @@
 
 <script>
 	import { email, required, minLength, sameAs } from 'vuelidate/lib/validators'
+	
 	export default {
 		name: 'Register',
 		data: () => ({

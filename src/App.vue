@@ -1,7 +1,7 @@
 <template>
 	<div id="app">
 		<component :is="layout">
-			<router-view/>
+			<router-view />
 		</component>
 	</div>
 </template>
@@ -9,6 +9,7 @@
 <script>
 	import EmptyLayout from '@/layouts/EmptyLayout'
 	import MainLayout from '@/layouts/MainLayout'
+	
 	export default {
 		computed: {
 			layout() {
@@ -31,7 +32,7 @@
 		font-family: 'Montserrat-Medium', sans-serif
 
 	form 
-		input.invalid
+		input.invalid, textarea.invalid
 			border: 1px solid #FC5C65
 		span 
 			text-align: center

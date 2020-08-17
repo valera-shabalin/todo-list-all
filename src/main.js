@@ -1,17 +1,23 @@
+/* Include libs and plugins */
 import Vue from 'vue'
 import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import './registerServiceWorker'
-import dateFilter from '@/filters/date.filter'
 import router from './router'
 import store from './store'
-import Loader from '@/components/app/Loader.vue'
 import 'materialize-css/dist/js/materialize.min'
 
+/* Include Firebase */
 import firebase from 'firebase/app'
 import 'firebase/auth'
 import 'firebase/database'
 import firebaseConfig from '@/config/firebase-config'
+
+/* Include global components */
+import Loader from '@/components/app/Loader.vue'
+
+/* Include filters */
+import dateFilter from '@/filters/date.filter'
 
 Vue.config.productionTip = false
 
@@ -27,9 +33,8 @@ Vue.component('Loader', Loader)
 /* Include Firebase to project */
 firebase.initializeApp(firebaseConfig())
 
-let app
-
 /* Initialization application */
+let app
 firebase.auth().onAuthStateChanged(() => {
 	if ( !app ) {
 		app = new Vue({

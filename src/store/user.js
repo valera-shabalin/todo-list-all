@@ -2,20 +2,19 @@ import firebase from 'firebase/app'
 
 export default {
 	actions: {
-		async getInfo({ dispatch, commit }) {
+		async getUserInfo({ dispatch, commit }) {
 			try {
 				const uid = await dispatch('getUid')
-				const user = (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
-				return user 
+				return (await firebase.database().ref(`/users/${uid}/info`).once('value')).val()
 			} catch(e) {
 				commit('setError', e)
 				throw e
 			}
 		},
-		async updateInfo({ dispatch, commit }, { name, surname }) {
+		async changeInfo({ dispatch, commit }, info) {
 			try {
 				const uid = await dispatch('getUid')
-				await firebase.database().ref(`/users/${uid}/info`).set({ name, surname })
+				await firebase.database().ref(`/users/${uid}/info`).set(info)
 			} catch(e) {
 				commit('setError', e)
 				throw e

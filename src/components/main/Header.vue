@@ -11,7 +11,7 @@
 					</div>
 				</div>
 				<div class="col-2 d-flex justify-content-end">
-					<div class="header__humb" :class="{js_open: value}" @click="$emit('click')">
+					<div class="header__humb" @click="$emit('openMenu')">
 						<span></span>
 						<span></span>
 						<span></span>
@@ -25,7 +25,6 @@
 <script>
 	export default {
 		name: 'Header',
-		props: ['value'],
 		data: () => ({
 			interval: null,
 			date: new Date(),

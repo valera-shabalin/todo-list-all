@@ -1,26 +1,28 @@
 <template>
+
 	<div>
 
-		<UserMenu v-model="userMenuOpen" />
-
-		<Header @click="userMenuOpen = !userMenuOpen" v-model="userMenuOpen" />
+		<Header @openMenu="menu = !menu" v-model="menu" />
+		
+		<Menu v-model="menu" />
 
 		<router-view />
 
 	</div>
+
 </template>
 
 <script>
-	import Header from '@/components/app/Header.vue'
-	import UserMenu from '@/components/app/UserMenu.vue'
+	import Header from '@/components/main/Header'
+	import Menu from '@/components/main/Menu'
 
 	export default {
 		name: 'MainLayout',
 		data: () => ({
-			userMenuOpen: false
+			menu: false
 		}),
 		components: {
-			Header, UserMenu
+			Menu, Header
 		}
 	}
 </script>

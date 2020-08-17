@@ -1,27 +1,26 @@
 <template>
-	<section class="user-settings">
+	<section class="user-settings" v-else>
 		<div class="container">
 			<div class="row justify-content-center">
 				<div class="col-lg-6">
 					<h1>Ваш профиль</h1>
-
 					<Loader v-if="loading" />
-
 					<form @submit.prevent="changeInfo" v-else>
 						<input 
-							type="name" 
+							type="text" 
 							class="default-input" 
-							placeholder="Ваше имя" 
+							placeholder="Ваше имя"
 							v-model.trim="name"
 							:class="{ invalid: ($v.name.$dirty && !$v.name.required) || ($v.name.$dirty && !$v.name.minLength) }"
 						/>
 						<input 
-							type="surname" 
+							type="text" 
 							class="default-input" 
-							placeholder="Ваша фамилия"
+							placeholder="Ваша фамилия" 
+							value="Шабалин"
 							v-model.trim="surname"
 							:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
-						/>
+						>
 						<input type="submit" class="btn btn_blue" value="Сохранить">
 					</form>
 				</div>
@@ -31,23 +30,21 @@
 </template>
 
 <script>
-	import Loader from '@/components/app/Loader.vue'
-	import { required, minLength, email } from 'vuelidate/lib/validators'
-	import firebase from 'firebase/app'
+	import { required, minLength } from 'vuelidate/lib/validators'
 
 	export default {
 		name: 'Edit',
 		data: () => ({
+			loading: true,
 			name: '',
-			surname: '',
-			loading: true
+			surname: ''
 		}),
 		validations: {
 			name: { required, minLength: minLength(3) },
 			surname: { required, minLength: minLength(3) }
 		},
 		async mounted() {
-			const info = await this.$store.dispatch('getInfo')
+			const info = await this.$store.dispatch('getUserInfo')
 			this.name = info.name
 			this.surname = info.surname
 			this.loading = false
@@ -63,13 +60,10 @@
 			    	surname: this.surname
 			    }
 			    try {
-			    	await this.$store.dispatch('updateInfo', user)
-			    	alert('Изменения сохранены!')
+			    	await this.$store.dispatch('changeInfo', user)
 			    } catch(e) {}
+			    alert('Информация успешно обновлена!')
 			}
-		},
-		components: {
-			Loader
 		}
 	}
 </script>
