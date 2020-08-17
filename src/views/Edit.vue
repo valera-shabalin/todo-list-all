@@ -4,7 +4,10 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-6">
 					<h1>Ваш профиль</h1>
-					<form @submit.prevent="changeInfo">
+
+					<Loader v-if="loading" />
+
+					<form @submit.prevent="changeInfo" v-else>
 						<input 
 							type="name" 
 							class="default-input" 
@@ -28,6 +31,7 @@
 </template>
 
 <script>
+	import Loader from '@/components/app/Loader.vue'
 	import { required, minLength, email } from 'vuelidate/lib/validators'
 	import firebase from 'firebase/app'
 
@@ -35,7 +39,8 @@
 		name: 'Edit',
 		data: () => ({
 			name: '',
-			surname: ''
+			surname: '',
+			loading: true
 		}),
 		validations: {
 			name: { required, minLength: minLength(3) },
@@ -45,6 +50,7 @@
 			const info = await this.$store.dispatch('getInfo')
 			this.name = info.name
 			this.surname = info.surname
+			this.loading = false
 		},
 		methods: {
 			async changeInfo() {
@@ -61,6 +67,9 @@
 			    	alert('Изменения сохранены!')
 			    } catch(e) {}
 			}
+		},
+		components: {
+			Loader
 		}
 	}
 </script>

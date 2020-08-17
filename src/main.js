@@ -5,6 +5,8 @@ import './registerServiceWorker'
 import dateFilter from '@/filters/date.filter'
 import router from './router'
 import store from './store'
+import Loader from '@/components/app/Loader.vue'
+import 'materialize-css/dist/js/materialize.min'
 
 import firebase from 'firebase/app'
 import 'firebase/auth'
@@ -18,6 +20,9 @@ Vue.use(Vuelidate)
 
 /* Add filters */
 Vue.filter('date', dateFilter)
+
+/* Register Vue components */
+Vue.component('Loader', Loader)
 
 /* Include Firebase to project */
 firebase.initializeApp(firebaseConfig())

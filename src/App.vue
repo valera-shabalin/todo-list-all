@@ -24,6 +24,8 @@
 <style lang="sass">
 	@import 'assets/css/style.css'
 	@import 'assets/css/bootstrap-grid.min.css'
+	@import 'assets/css/loader.css'
+
 	.header .header__date 
 		margin-left: 5px
 		font-family: 'Montserrat-Medium', sans-serif
