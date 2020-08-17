@@ -86,7 +86,7 @@
 		name: 'List',
 		props: ['value'],
 		mounted() {
-			console.log(this.value)
+			
 		}
 	}
 </script>
