@@ -47,6 +47,7 @@
 		methods: {
 			addList(list) {
 				this.list.push(list)
+				this.$message(`Список "${list.title}" успешно добавлен!`)
 			},
 			async addTodo(todo) {
 				this.todo.list.push(todo)
@@ -62,26 +63,34 @@
 						}
 					}
 				} catch(e) {}
-				this.$message('Дело успешно добавлено!')
+				this.$message(`Дело "${todo.title}" успешно добавлено!`)
 			},
 			async deleteList(id) {
+				let title = ''
 				for ( let i = 0; i < this.list.length; i++ ) {
 					if ( this.list[i].id == id ) {
+						title = this.list[i].title
 						this.list.splice(i, 1)
 					}
 				}
-				this.$message('Список успешно удалён!')
+				if ( this.list.length == 0 ) {
+					this.todo.title = '',
+					this.todo.currentId = ''
+				}
+				this.$message(`Список "${title}" успешно удалён!`)
 			},
 			async deleteTodo(listId, id) {
 				const update = {
 					id: listId,
 					progress: 0
 				}
+				let title = ''
 				try {
 					await this.$store.dispatch('deleteTodo', { listId, id })
 
 					for (let i = 0; i < this.todo.list.length; i++) {
 						if ( this.todo.list[i].id == id ) {
+							title = this.todo.list[i].title
 							this.todo.list.splice(i, 1)
 						}
 					}
@@ -95,7 +104,7 @@
 						}
 					}
 				} catch(e) {}
-				this.$message('Дело успешно удалено!')
+				this.$message(`Дело "${title}" успешно удалено!`)
 			},
 			async updateWarn(listId, id, warn) {
 				try {
@@ -118,10 +127,12 @@
 				} catch(e) {}
 			},
 			async changeList(id, index) {
-				this.todo.list = null
-				this.todo.currentId = id
-				this.todo.title = this.list[index].title
-				this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
+				try {
+					this.todo.list = null
+					this.todo.currentId = id
+					this.todo.title = this.list[index].title
+					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
+				} catch(e) {}
 			}
 		},
 		components: {

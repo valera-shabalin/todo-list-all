@@ -42,7 +42,6 @@
 			    	this.title = ''
 			    	this.$v.$reset()
 			    	this.$emit('addList', list)
-			    	alert('Новый список успешно создан!')
 			    } catch(e) {}
 			}
 		}

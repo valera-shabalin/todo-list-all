@@ -26,7 +26,6 @@
 				try {
 					await this.$store.dispatch('deleteList', id)
 					this.$emit('deleteList', id)
-					alert('Список успешно удалён!')
 				} catch(e) {}
 			}
 		}

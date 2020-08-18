@@ -69,7 +69,6 @@
 			    	warn: false
 			    	this.$v.$reset()
 			    	this.$emit('addTodo', todo)
-			    	alert('Новое дело успешно создано!')
 			    } catch(e) {}
 			}
 		}
