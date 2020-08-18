@@ -15,7 +15,7 @@
 			</div>
 		</section>
 
-		<Footer />
+		<Footer @addList="addList" />
 
 	</div>
 
@@ -32,8 +32,13 @@
 			list: [],
 			todo: [],
 		}),
-		mounted() {
-			
+		async mounted() {
+			this.list = await this.$store.dispatch('fetchLists')
+		},
+		methods: {
+			addList(list) {
+				this.list.push(list)
+			}
 		},
 		components: {
 			List, Todo, Footer
