@@ -1,7 +1,6 @@
 <template>
-	
 	<div>
-
+		<Prompt :prompt="prompt" />
 		<section class="main">
 			<div class="container-fluid p-0">
 				<div class="row">
@@ -14,11 +13,8 @@
 				</div>
 			</div>
 		</section>
-
 		<Footer :todo="todo" @addList="addList" @addTodo="addTodo" />
-
 	</div>
-
 </template>
 
 <script>
@@ -29,6 +25,10 @@
 	export default {
 		name: 'Home',
 		data: () => ({
+			prompt: {
+				title: '',
+				hidden: true
+			},
 			list: [],
 			todo: {
 				title: '',
@@ -68,19 +68,21 @@
 				} catch(e) {}
 				this.$message(`Дело "${todo.title}" успешно добавлено!`)
 			},
-			async deleteList(id) {
-				let title = ''
-				for ( let i = 0; i < this.list.length; i++ ) {
-					if ( this.list[i].id == id ) {
-						title = this.list[i].title
-						this.list.splice(i, 1)
+			async deleteList(id, listTitle) {
+				try {
+					await this.$store.dispatch('deleteList', id)
+					for ( let i = 0; i < this.list.length; i++ ) {
+						if ( this.list[i].id == id ) {
+							title = this.list[i].title
+							this.list.splice(i, 1)
+						}
 					}
-				}
-				if ( this.list.length == 0 ) {
-					this.todo.title = '',
-					this.todo.currentId = ''
-				}
-				this.$message(`Список "${title}" успешно удалён!`)
+					if ( this.list.length == 0 ) {
+						this.todo.title = '',
+						this.todo.currentId = ''
+					}
+					this.$message(`Список "${listTitle}" успешно удалён!`)
+				} catch(e) {}
 			},
 			async deleteTodo(listId, id) {
 				const update = {
@@ -136,6 +138,9 @@
 					this.todo.title = this.list[index].title
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
+			},
+			agree(status) {
+				return status
 			}
 		},
 		components: {

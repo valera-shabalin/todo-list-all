@@ -21,11 +21,10 @@ export default {
 			close.addEventListener('click', (e) => {
 				e.preventDefault()
 				document.body.removeChild(modal)
-			}) 
+			})
 		}
-
-		Vue.prototype.$error = function(html) {
-			console.log(html)
+		Vue.prototype.$error = function(error) {
+			console.log(error)
 		}
 	}
 }
