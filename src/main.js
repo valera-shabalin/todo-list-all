@@ -6,6 +6,7 @@ import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import 'materialize-css/dist/js/materialize.min'
+import messagePlugin from '@/utils/message.plugin'
 
 /* Include Firebase */
 import firebase from 'firebase/app'
@@ -23,6 +24,7 @@ Vue.config.productionTip = false
 
 /* Add plugins */
 Vue.use(Vuelidate)
+Vue.use(messagePlugin)
 
 /* Add filters */
 Vue.filter('date', dateFilter)

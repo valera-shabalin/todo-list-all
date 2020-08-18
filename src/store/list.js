@@ -39,6 +39,15 @@ export default {
 				commit('setError', e)
 				throw e
 			}
-		}	
+		},
+		async deleteAllLists({ dispatch, commit }) {
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists`).remove()
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
+		}
 	}
 }

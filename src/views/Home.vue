@@ -62,6 +62,7 @@
 						}
 					}
 				} catch(e) {}
+				this.$message('Дело успешно добавлено!')
 			},
 			async deleteList(id) {
 				for ( let i = 0; i < this.list.length; i++ ) {
@@ -69,6 +70,7 @@
 						this.list.splice(i, 1)
 					}
 				}
+				this.$message('Список успешно удалён!')
 			},
 			async deleteTodo(listId, id) {
 				const update = {
@@ -92,10 +94,8 @@
 							}
 						}
 					}
-
-					alert('Дело успешно удалено!')
 				} catch(e) {}
-				
+				this.$message('Дело успешно удалено!')
 			},
 			async updateWarn(listId, id, warn) {
 				try {

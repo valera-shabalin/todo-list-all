@@ -22,6 +22,7 @@
 							:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
 						>
 						<input type="submit" class="btn btn_blue" value="Сохранить">
+						<a href="#" class="btn btn_red" @click.prevent="deleteAll">Удалить все списки</a>
 					</form>
 				</div>
 			</div>
@@ -63,6 +64,10 @@
 			    	await this.$store.dispatch('changeInfo', user)
 			    } catch(e) {}
 			    alert('Информация успешно обновлена!')
+			},
+			async deleteAll() {
+				await this.$store.dispatch('deleteAllLists')
+				alert('Все списки были успешно удалены!')
 			}
 		}
 	}
