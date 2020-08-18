@@ -6,7 +6,7 @@
 					<FooterList @addList="addList"  />
 				</div>
 				<div class="col-md-8 col-sm-7">
-					<FooterTodo />
+					<FooterTodo :todo="todo" @addTodo="addTodo" />
 				</div>
 			</div>
 		</div>
@@ -19,9 +19,18 @@
 
 	export default {
 		name: 'Footer',
+		props: {
+			todo: {
+				type: Object,
+				default: {}
+			}
+		},
 		methods: {
 			addList(list) {
 				this.$emit('addList', list)
+			},
+			addTodo(todo) {
+				this.$emit('addTodo', todo)
 			}
 		},
 		components: {

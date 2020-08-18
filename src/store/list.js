@@ -15,8 +15,17 @@ export default {
 		async fetchLists({ dispatch, commit }) {
 			try {
 				const uid = await dispatch('getUid')
-				const list = (await firebase.database().ref(`/users/${uid}/lists`).once('value')).val()
+				const list = (await firebase.database().ref(`/users/${uid}/lists`).once('value')).val() || {}
 				return Object.keys(list).map(key => ({ ...list[key], id: key }))
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
+		},
+		async deleteList({ dispatch, commit }, id) {
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists/${id}`).remove()
 			} catch(e) {
 				commit('setError', e)
 				throw e

@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import auth from './auth'
 import user from './user'
 import list from './list'
+import todo from './todo'
 
 Vue.use(Vuex)
 
@@ -25,6 +26,6 @@ export default new Vuex.Store({
 
 	},
 	modules: {
-		auth, user, list
+		auth, user, list, todo
 	}
 })
