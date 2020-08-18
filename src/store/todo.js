@@ -37,6 +37,26 @@ export default {
 				commit('setError', e)
 				throw e
 			}
+		},
+		async switchTodoWarn({ dispatch, commit }, { listId, id, warn }) {
+			warn = !warn
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists/${listId}/todo/${id}`).update({warn})
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
+		},
+		async switchTodoProgress({ dispatch, commit }, { listId, id, progress }) {
+			progress = !progress
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists/${listId}/todo/${id}`).update({progress})
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
 		}
 	}
 }

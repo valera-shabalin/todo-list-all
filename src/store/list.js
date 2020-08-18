@@ -30,6 +30,15 @@ export default {
 				commit('setError', e)
 				throw e
 			}
-		}
+		},
+		async updateListProgress({ dispatch, commit }, { id, progress }) {
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists`).child(`${id}`).update({progress})
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
+		}	
 	}
 }

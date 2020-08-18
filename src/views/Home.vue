@@ -9,7 +9,7 @@
 						<List v-model="list" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
-						<Todo :todo="todo" @deleteTodo="deleteTodo" />
+						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" />
 					</div>
 				</div>
 			</div>
@@ -43,16 +43,27 @@
 				this.todo.title = this.list[0].title
 				this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 			}
-			console.log(this.todo)
 		},
 		methods: {
 			addList(list) {
 				this.list.push(list)
 			},
-			addTodo(todo) {
+			async addTodo(todo) {
 				this.todo.list.push(todo)
+				const update = {
+					id: todo.listId,
+					progress: 1
+				}
+				try {
+					await this.$store.dispatch('updateListProgress', update)
+					for (let i = 0; i < this.list.length; i++) {
+						if ( this.list[i].id == this.todo.currentId ) {
+							this.list[i].progress = 1
+						}
+					}
+				} catch(e) {}
 			},
-			deleteList(id) {
+			async deleteList(id) {
 				for ( let i = 0; i < this.list.length; i++ ) {
 					if ( this.list[i].id == id ) {
 						this.list.splice(i, 1)
@@ -60,15 +71,51 @@
 				}
 			},
 			async deleteTodo(listId, id) {
+				const update = {
+					id: listId,
+					progress: 0
+				}
 				try {
 					await this.$store.dispatch('deleteTodo', { listId, id })
+
+					for (let i = 0; i < this.todo.list.length; i++) {
+						if ( this.todo.list[i].id == id ) {
+							this.todo.list.splice(i, 1)
+						}
+					}
+					
+					if ( this.todo.list.length == 0 ) {
+						await this.$store.dispatch('updateListProgress', update)
+						for (let i = 0; i < this.list.length; i++) {
+							if ( this.list[i].id == this.todo.currentId ) {
+								this.list[i].progress = 0
+							}
+						}
+					}
+
 					alert('Дело успешно удалено!')
 				} catch(e) {}
-				for (let i = 0; i < this.todo.list.length; i++) {
-					if ( this.todo.list[i].id == id ) {
-						this.todo.list.splice(i, 1)
+				
+			},
+			async updateWarn(listId, id, warn) {
+				try {
+					await this.$store.dispatch('switchTodoWarn', { listId, id, warn })
+					for (let i = 0; i < this.todo.list.length; i++) {
+						if ( this.todo.list[i].id == id ) {
+							this.todo.list[i].warn = !this.todo.list[i].warn
+						}
 					}
-				}
+				} catch(e) {}
+			},
+			async updateProgress(listId, id, progress) {
+				try {
+					await this.$store.dispatch('switchTodoProgress', { listId, id, progress })
+					for (let i = 0; i < this.todo.list.length; i++) {
+						if ( this.todo.list[i].id == id ) {
+							this.todo.list[i].progress = !this.todo.list[i].progress
+						}
+					}
+				} catch(e) {}
 			},
 			async changeList(id, index) {
 				this.todo.list = null
