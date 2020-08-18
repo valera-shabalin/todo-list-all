@@ -3,9 +3,10 @@
 		<h2>Ваши списки дел</h2>
 
 		<div 
-			class="main__list-item green"
+			class="main__list-item"
 			v-for="list of value"
 			:key="list.id"
+			:class="{ green: list.progress == 1, grey: list.progress == 2 }"
 		>
 			<h3>{{ list.title }}</h3>
 			<a href="#" class="item_btn del" @click="deleteList(list.id)">
