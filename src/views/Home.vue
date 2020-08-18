@@ -45,9 +45,12 @@
 			}
 		},
 		methods: {
-			addList(list) {
+			async addList(list) {
 				this.list.push(list)
 				this.$message(`Список "${list.title}" успешно добавлен!`)
+				this.todo.title = list.title
+				this.todo.currentId = list.id
+				this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 			},
 			async addTodo(todo) {
 				this.todo.list.push(todo)
