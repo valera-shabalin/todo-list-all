@@ -27,12 +27,22 @@
 	@import 'assets/css/bootstrap-grid.min.css'
 	@import 'assets/css/loader.css'
 
+	input[type=checkbox]
+		height: 15px	
+		width: 15px	
+		border: 1px solid #A6A6A6
+		border-radius: 5px
+		outline: none
+		&:checked
+			border: 1px solid #45AAF2
+			background: #45AAF2
+
+	label, input[type=checkbox]
+		cursor: pointer
+
 	.loader-body
 		display: flex
 		justify-content: center
 		align-items: center
-
-	body
-		-webkit-appearance: none
 
 </style>
