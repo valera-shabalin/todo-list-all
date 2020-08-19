@@ -8,7 +8,7 @@
 						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
-						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" @createSubtask="createSubtask" />
+						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" />
 					</div>
 				</div>
 			</div>
@@ -152,21 +152,39 @@
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
 			},
-			async createSubtask(listId, todoId, todoTitle) {
+			async createSubtask(listId, todoId) {
 				this.$subtask(`Создать подзадачу?`, async (title) => {
 					try {
 						const info = {
-							title, listId, todoId, todoTitle,
+							title, listId, todoId,
 							date: new Date().toJSON()
 						}
 						const subtask = await this.$store.dispatch('createSubtask', info)
 						for (let i = 0; i < this.todo.list.length; i++) {
-							console.log(this.todo.list[i])
 							if ( this.todo.list[i].id == todoId ) {
 								this.todo.list[i].subtasks.push(subtask)
 							}
 						}
 						this.$message(`Подзадача "${subtask.title}" успешно добавлена!`)
+					} catch(e) {}
+				})
+			},
+			async deleteSubtask(listId, todoId, title, id) {
+				this.$prompt(`Удалить подзадачу "${title}"`, async () => {
+					try {
+
+						await this.$store.dispatch('deleteSubtask', { listId, todoId, id })
+
+						for (let i = 0; i < this.todo.list.length; i++) {
+							if ( this.todo.list[i].id == todoId ) {
+								for (let j = 0; j < this.todo.list[i].subtasks.length; j++) {
+									if ( this.todo.list[i].subtasks[j].id == id ) {
+										this.todo.list[i].subtasks.splice(j, 1)
+									}
+								}
+							}
+						}
+
 					} catch(e) {}
 				})
 			}
