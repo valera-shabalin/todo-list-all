@@ -16,7 +16,6 @@ import firebaseConfig from '@/config/firebase-config'
 
 /* Include global components */
 import Loader from '@/components/app/Loader'
-import Prompt from '@/components/app/Prompt'
 
 /* Include filters */
 import dateFilter from '@/filters/date.filter'
@@ -32,7 +31,6 @@ Vue.filter('date', dateFilter)
 
 /* Register Vue components */
 Vue.component('Loader', Loader)
-Vue.component('Prompt', Prompt)
 
 /* Include Firebase to project */
 firebase.initializeApp(firebaseConfig())

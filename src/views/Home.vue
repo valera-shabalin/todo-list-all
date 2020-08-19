@@ -1,11 +1,10 @@
 <template>
 	<div>
-		<Prompt :prompt="prompt" />
 		<section class="main">
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-4 col-sm-5 d-none d-sm-block">
-						<List v-model="list" @deleteList="deleteList" @changeList="changeList" />
+						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
 						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" />
@@ -25,10 +24,6 @@
 	export default {
 		name: 'Home',
 		data: () => ({
-			prompt: {
-				title: '',
-				hidden: true
-			},
 			list: [],
 			todo: {
 				title: '',
@@ -69,47 +64,56 @@
 				this.$message(`Дело "${todo.title}" успешно добавлено!`)
 			},
 			async deleteList(id, listTitle) {
-				try {
-					await this.$store.dispatch('deleteList', id)
-					for ( let i = 0; i < this.list.length; i++ ) {
-						if ( this.list[i].id == id ) {
-							title = this.list[i].title
-							this.list.splice(i, 1)
-						}
-					}
-					if ( this.list.length == 0 ) {
-						this.todo.title = '',
-						this.todo.currentId = ''
-					}
-					this.$message(`Список "${listTitle}" успешно удалён!`)
-				} catch(e) {}
-			},
-			async deleteTodo(listId, id) {
-				const update = {
-					id: listId,
-					progress: 0
-				}
-				let title = ''
-				try {
-					await this.$store.dispatch('deleteTodo', { listId, id })
-
-					for (let i = 0; i < this.todo.list.length; i++) {
-						if ( this.todo.list[i].id == id ) {
-							title = this.todo.list[i].title
-							this.todo.list.splice(i, 1)
-						}
-					}
-					
-					if ( this.todo.list.length == 0 ) {
-						await this.$store.dispatch('updateListProgress', update)
-						for (let i = 0; i < this.list.length; i++) {
-							if ( this.list[i].id == this.todo.currentId ) {
-								this.list[i].progress = 0
+				this.$prompt(`Удалить список "${listTitle}?"`, async () => {
+					try {
+						let title = ''
+						await this.$store.dispatch('deleteList', id)
+						for ( let i = 0; i < this.list.length; i++ ) {
+							if ( this.list[i].id == id ) {
+								title = this.list[i].title
+								this.list.splice(i, 1)
 							}
 						}
+						if ( this.list.length == 0 ) {
+							this.todo.title = '',
+							this.todo.currentId = ''
+						} else {
+							this.todo.currentId = this.list[0].id
+							this.todo.title = this.list[0].title
+							this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
+						}
+						this.$message(`Список "${listTitle}" успешно удалён!`)
+					} catch(e) {
+						console.log(e)
 					}
-				} catch(e) {}
-				this.$message(`Дело "${title}" успешно удалено!`)
+				})
+			},
+			async deleteTodo(listId, id, title) {
+				this.$prompt(`Удалить дело "${title}"?`, async () => {
+					const update = {
+						id: listId,
+						progress: 0
+					}
+					try {
+						await this.$store.dispatch('deleteTodo', { listId, id })
+
+						for (let i = 0; i < this.todo.list.length; i++) {
+							if ( this.todo.list[i].id == id ) {
+								this.todo.list.splice(i, 1)
+							}
+						}
+						
+						if ( this.todo.list.length == 0 ) {
+							await this.$store.dispatch('updateListProgress', update)
+							for (let i = 0; i < this.list.length; i++) {
+								if ( this.list[i].id == this.todo.currentId ) {
+									this.list[i].progress = 0
+								}
+							}
+						}
+					} catch(e) {}
+					this.$message(`Дело "${title}" успешно удалено!`)
+				})
 			},
 			async updateWarn(listId, id, warn) {
 				try {
@@ -138,9 +142,6 @@
 					this.todo.title = this.list[index].title
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
-			},
-			agree(status) {
-				return status
 			}
 		},
 		components: {

@@ -63,11 +63,13 @@
 			    try {
 			    	await this.$store.dispatch('changeInfo', user)
 			    } catch(e) {}
-			    alert('Информация успешно обновлена!')
+			    this.$message('Ваша информация успешно обновлена!')
 			},
 			async deleteAll() {
-				await this.$store.dispatch('deleteAllLists')
-				alert('Все списки были успешно удалены!')
+				this.$prompt(`Вы уверены, что хотите удалить все списки?`, async () => {
+					await this.$store.dispatch('deleteAllLists')
+					this.$message('Все списки удалены!')
+				})
 			}
 		}
 	}
