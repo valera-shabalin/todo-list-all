@@ -60,5 +60,28 @@ export default {
 			})
 			return
 		}
+		Vue.prototype.$error = function(error) {
+			let modal = document.createElement('div')
+			modal.innerHTML = ` 
+				<div class="modal-window">
+					<div class="container">
+						<div class="row justify-content-center">
+							<div class="col-lg-8">
+								<div class="modal-window__form">
+									<a href="#" class="close"">Закрыть</a>
+									<h2>[Ошибка]: ${error}</h2>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			`
+			document.body.appendChild(modal)
+			let close = document.body.querySelector('.modal-window .close')
+			close.addEventListener('click', (e) => {
+				e.preventDefault()
+				document.body.removeChild(modal)
+			})
+		}
 	}
 }

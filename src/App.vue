@@ -37,6 +37,11 @@
 		span 
 			text-align: center
 
+	.loader-body
+		display: flex
+		justify-content: center
+		align-items: center
+
 	@media (max-width: 480px)
 		.header
 			&__date

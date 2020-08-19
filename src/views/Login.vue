@@ -77,7 +77,9 @@
 			    try {
 			    	await this.$store.dispatch('login', formData)
 			    	this.$router.push('/')
-			    } catch(e) {}
+			    } catch(e) {
+			    	this.$error(messages[e.code])
+			    }
 			}
 		}
 	}

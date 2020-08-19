@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<section class="main">
+		<Loader v-if="loading" />
+		<section class="main" v-else>
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-4 col-sm-5 d-none d-sm-block">
@@ -16,6 +17,12 @@
 	</div>
 </template>
 
+<style lang="sass">
+	.loader-body
+		height: 100vh
+	    width: 100vw
+</style>
+
 <script>
 	import Footer from '@/components/main/Footer'
 	import List from '@/components/main/List'
@@ -24,6 +31,7 @@
 	export default {
 		name: 'Home',
 		data: () => ({
+			loading: true,
 			list: [],
 			todo: {
 				title: '',
@@ -38,6 +46,7 @@
 				this.todo.title = this.list[0].title
 				this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 			}
+			this.loading = false
 		},
 		methods: {
 			async addList(list) {
