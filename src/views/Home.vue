@@ -155,17 +155,19 @@
 			async createSubtask(listId, todoId, todoTitle) {
 				this.$subtask(`Создать подзадачу?`, async (title) => {
 					try {
-
 						const info = {
 							title, listId, todoId, todoTitle,
 							date: new Date().toJSON()
 						}
 						const subtask = await this.$store.dispatch('createSubtask', info)
-
-					} catch(e) {
-						console.log(e)
-
-					}
+						for (let i = 0; i < this.todo.list.length; i++) {
+							console.log(this.todo.list[i])
+							if ( this.todo.list[i].id == todoId ) {
+								this.todo.list[i].subtasks.push(subtask)
+							}
+						}
+						this.$message(`Подзадача "${subtask.title}" успешно добавлена!`)
+					} catch(e) {}
 				})
 			}
 		},
