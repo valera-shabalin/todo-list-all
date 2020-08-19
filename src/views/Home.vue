@@ -1,11 +1,24 @@
 <template>
 	<div>
+		<EditList :editListData="editListData">
+			<a href="#" class="close" @click.prevent="closeEditList">Закрыть</a>
+			<h2>{{ editListData.title }}</h2>
+			<form @submit.prevent="updateData">
+				<input 
+					type="text" 
+					class="default-input" 
+					placeholder="Название списка"
+					v-model="editListData.listTitle"
+				/>
+				<input type="submit" class="btn btn_blue" value="Обновить">
+			</form>
+		</EditList>
 		<Loader v-if="loading" />
 		<section class="main" v-else>
 			<div class="container-fluid p-0">
 				<div class="row">
 					<div class="col-md-4 col-sm-5">
-						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
+						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" @editList="editList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
 						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateTodoProgress="updateTodoProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" />
@@ -27,6 +40,7 @@
 	import Footer from '@/components/main/Footer'
 	import List from '@/components/main/List'
 	import Todo from '@/components/main/Todo'
+	import EditList from '@/components/main/EditList'
 
 	export default {
 		name: 'Home',
@@ -37,6 +51,13 @@
 				title: '',
 				currentId: '',
 				list: []
+			},
+			editListData: {
+				title: '',
+				listId: '',
+				listTitle: '',
+				index: '',
+				hidden: true
 			}
 		}),
 		async mounted() {
@@ -49,6 +70,38 @@
 			this.loading = false
 		},
 		methods: {
+			editList(listId, title, index) {
+				this.editListData = {
+					title: `Редактирование списка "${title}"`,
+					listTitle: title,
+					listId,
+					index,
+					hidden: false
+				}
+			},
+			closeEditList() {
+				this.editListData = {
+					title: '',
+					listId: null,
+					index: null,
+					hidden: true
+				}
+			},
+			async updateData() {
+				try {
+					const info = {
+						id: this.editListData.listId,
+						title: this.editListData.listTitle
+					}
+					await this.$store.dispatch('updateListTitle', info)
+					this.list[this.editListData.index].title = info.title
+					console.log(this.list[this.editListData.index])
+					this.closeEditList()
+					this.$message('Список успешно обновлён!')
+				} catch(e) {
+					console.log(e)
+				}
+			},
 			async addList(list) {
 				this.list.push(list)
 				this.$message(`Список "${list.title}" успешно добавлен!`)
@@ -219,7 +272,7 @@
 			}
 		},
 		components: {
-			List, Todo, Footer
+			List, Todo, Footer, EditList
 		}
 	}
 </script>

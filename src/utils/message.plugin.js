@@ -8,7 +8,7 @@ export default {
 						<div class="row justify-content-center">
 							<div class="col-lg-8">
 								<div class="modal-window__form">
-									<a href="#" class="close"">Закрыть</a>
+									<a href="#" class="close message-close">Закрыть</a>
 									<h2>${title}</h2>
 								</div>
 							</div>
@@ -17,7 +17,7 @@ export default {
 				</div>
 			`
 			document.body.appendChild(modal)
-			let close = document.body.querySelector('.modal-window .close')
+			let close = document.body.querySelector('.modal-window .message-close')
 			close.addEventListener('click', e => {
 				e.preventDefault()
 				document.body.removeChild(modal)

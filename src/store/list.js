@@ -40,6 +40,15 @@ export default {
 				throw e
 			}
 		},
+		async updateListTitle({ dispatch, commit }, { id, title }) {
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists`).child(`${id}`).update({title})
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
+		},
 		async deleteAllLists({ dispatch, commit }) {
 			try {
 				const uid = await dispatch('getUid')
