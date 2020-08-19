@@ -32,4 +32,7 @@
 		justify-content: center
 		align-items: center
 
+	body
+		-webkit-appearance: none
+
 </style>
