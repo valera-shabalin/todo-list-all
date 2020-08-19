@@ -1,5 +1,5 @@
 <template>
-	<div class="user-menu" :class="{ js_open: value }">
+	<div class="user-menu" :class="{ js_open: menu }">
 		<nav class="user-menu__nav">
 			<router-link to="/" class="user-menu__link btn btn_green">Главная страница</router-link>
 			<router-link to="/edit" class="user-menu__link btn btn_blue">Редактирование профиля</router-link>
@@ -11,7 +11,12 @@
 <script>
 	export default {
 		name: 'Menu',
-		props: ['value'],
+		props: {
+			menu: {
+				type: Boolean,
+				default: false
+			}
+		},
 		methods: {
 			async logout() {
 				await this.$store.dispatch('logout')

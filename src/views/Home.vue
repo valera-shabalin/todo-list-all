@@ -4,7 +4,7 @@
 		<section class="main" v-else>
 			<div class="container-fluid p-0">
 				<div class="row">
-					<div class="col-md-4 col-sm-5 d-none d-sm-block">
+					<div class="col-md-4 col-sm-5">
 						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
@@ -172,9 +172,7 @@
 			async deleteSubtask(listId, todoId, title, id) {
 				this.$prompt(`Удалить подзадачу "${title}"`, async () => {
 					try {
-
 						await this.$store.dispatch('deleteSubtask', { listId, todoId, id })
-
 						for (let i = 0; i < this.todo.list.length; i++) {
 							if ( this.todo.list[i].id == todoId ) {
 								for (let j = 0; j < this.todo.list[i].subtasks.length; j++) {
@@ -184,7 +182,6 @@
 								}
 							}
 						}
-
 					} catch(e) {}
 				})
 			}
