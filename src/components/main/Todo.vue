@@ -4,7 +4,8 @@
 
 		<div 
 			class="main__affairs-item"
-			v-for="item of todo.list">
+			v-for="item of todo.list"
+			v-if="todo.currentId">
 			<div class="body" :class="{ green: item.progress }">
 				<div class="content">
 					<h3>{{ item.title }}</h3>
