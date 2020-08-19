@@ -4,7 +4,7 @@
 
 		<Header @openMenu="menu = !menu" v-model="menu" />
 		
-		<Menu :menu="menu" @chahgeListMobile="chahgeListMobile" />
+		<Menu :menu="menu" />
 
 		<router-view />
 

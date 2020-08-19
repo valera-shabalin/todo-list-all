@@ -8,7 +8,7 @@
 						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
-						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" />
+						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateTodoProgress="updateTodoProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" />
 					</div>
 				</div>
 			</div>
@@ -134,7 +134,7 @@
 					}
 				} catch(e) {}
 			},
-			async updateProgress(listId, id, progress) {
+			async updateTodoProgress(listId, id, progress) {
 				try {
 					await this.$store.dispatch('switchTodoProgress', { listId, id, progress })
 					for (let i = 0; i < this.todo.list.length; i++) {
@@ -142,7 +142,39 @@
 							this.todo.list[i].progress = !this.todo.list[i].progress
 						}
 					}
-				} catch(e) {}
+					let flag = true,
+						index
+					for (let i = 0; i < this.todo.list.length; i++) {
+						if ( !this.todo.list[i].progress ) {
+							flag = false
+						}
+					}
+					if ( flag ) {
+						const update = {
+							id: listId,
+							progress: 2
+						}
+						await this.$store.dispatch('updateListProgress', update)
+						for (let i = 0; i < this.list.length; i++) {
+							if ( this.list[i].id == listId ) {
+								this.list[i].progress = 2
+							}
+						}
+					} else {
+						const update = {
+							id: listId,
+							progress: 1
+						}
+						await this.$store.dispatch('updateListProgress', update)
+						for (let i = 0; i < this.list.length; i++) {
+							if ( this.list[i].id == listId ) {
+								this.list[i].progress = 1
+							}
+						}
+					}
+				} catch(e) {
+					console.log(e)
+				}
 			},
 			async changeList(id, index) {
 				try {
