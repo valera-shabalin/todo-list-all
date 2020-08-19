@@ -4,6 +4,7 @@ import auth from './auth'
 import user from './user'
 import list from './list'
 import todo from './todo'
+import subtask from './subtask'
 
 Vue.use(Vuex)
 
@@ -26,6 +27,6 @@ export default new Vuex.Store({
 
 	},
 	modules: {
-		auth, user, list, todo
+		auth, user, list, todo, subtask
 	}
 })

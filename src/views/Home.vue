@@ -8,7 +8,7 @@
 						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
-						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" />
+						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateProgress="updateProgress" @createSubtask="createSubtask" />
 					</div>
 				</div>
 			</div>
@@ -151,6 +151,22 @@
 					this.todo.title = this.list[index].title
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
+			},
+			async createSubtask(listId, todoId, todoTitle) {
+				this.$subtask(`Создать подзадачу?`, async (title) => {
+					try {
+
+						const info = {
+							title, listId, todoId, todoTitle,
+							date: new Date().toJSON()
+						}
+						const subtask = await this.$store.dispatch('createSubtask', info)
+
+					} catch(e) {
+						console.log(e)
+
+					}
+				})
 			}
 		},
 		components: {

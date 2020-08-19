@@ -20,6 +20,14 @@ export default {
 				Object.keys(todo).forEach(item => {
 					if ( todo[item].listId == listId ) {
 						todo[item].id = item
+						let subtasks = []
+						if ( todo[item].subtasks !== undefined ) {
+							Object.keys(todo[item].subtasks).forEach(sub => {
+								todo[item].subtasks[sub].id = sub
+								subtasks.push(todo[item].subtasks[sub])
+							})
+						}
+						todo[item].subtasks = subtasks
 						result.push(todo[item])
 					}
 				})

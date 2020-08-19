@@ -18,7 +18,7 @@ export default {
 			`
 			document.body.appendChild(modal)
 			let close = document.body.querySelector('.modal-window .close')
-			close.addEventListener('click', (e) => {
+			close.addEventListener('click', e => {
 				e.preventDefault()
 				document.body.removeChild(modal)
 			})
@@ -45,16 +45,16 @@ export default {
 			let close = document.body.querySelector('.modal-window .close'),
 				yes = document.body.querySelector('.modal-window .js_yes'),
 				no = document.body.querySelector('.modal-window .js_no')
-			close.addEventListener('click', (e) => {
+			close.addEventListener('click', e => {
 				e.preventDefault()
 				document.body.removeChild(modal)
 			})
-			yes.addEventListener('click', async (e) => {
+			yes.addEventListener('click', async e => {
 				e.preventDefault()
 				document.body.removeChild(modal)
 				callback()
 			})
-			no.addEventListener('click', async (e) => {
+			no.addEventListener('click', e => {
 				e.preventDefault()
 				document.body.removeChild(modal)
 			})
@@ -78,7 +78,7 @@ export default {
 			`
 			document.body.appendChild(modal)
 			let close = document.body.querySelector('.modal-window .close')
-			close.addEventListener('click', (e) => {
+			close.addEventListener('click', e => {
 				e.preventDefault()
 				document.body.removeChild(modal)
 			})

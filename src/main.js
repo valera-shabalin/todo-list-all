@@ -7,6 +7,7 @@ import router from './router'
 import store from './store'
 import 'materialize-css/dist/js/materialize.min'
 import messagePlugin from '@/utils/message.plugin'
+import subtaskPlugin from '@/utils/subtask.plugin'
 
 /* Include Firebase */
 import firebase from 'firebase/app'
@@ -25,6 +26,7 @@ Vue.config.productionTip = false
 /* Add plugins */
 Vue.use(Vuelidate)
 Vue.use(messagePlugin)
+Vue.use(subtaskPlugin)
 
 /* Add filters */
 Vue.filter('date', dateFilter)
