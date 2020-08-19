@@ -14,7 +14,7 @@
 
 <script>
 	export default {
-		name: 'EditList',
+		name: 'EditTodo',
 		props: ['value']
 	}
 </script>

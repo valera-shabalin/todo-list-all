@@ -65,6 +65,15 @@ export default {
 				commit('setError', e)
 				throw e
 			}
+		},
+		async updateTodoData({ dispatch, commit }, { id, listId, title, description }) {
+			try {
+				const uid = await dispatch('getUid')
+				firebase.database().ref(`/users/${uid}/lists/${listId}/todo/${id}`).update({ title, description })
+			} catch(e) {
+				commit('setError', e)
+				throw e
+			}
 		}
 	}
 }

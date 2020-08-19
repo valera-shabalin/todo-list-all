@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<EditList :editListData="editListData">
+		<EditList v-model="editListData.hidden">
 			<a href="#" class="close" @click.prevent="closeEditList">Закрыть</a>
 			<h2>{{ editListData.title }}</h2>
 			<form @submit.prevent="updateData">
@@ -13,6 +13,27 @@
 				<input type="submit" class="btn btn_blue" value="Обновить">
 			</form>
 		</EditList>
+
+		<EditTodo v-model="editTodoData.hidden">
+			<a href="#" class="close" @click.prevent="closeEditTodo">Закрыть</a>
+			<h2>{{ editTodoData.title }}</h2>
+			<form @submit.prevent="updateTodoData">
+				<input 
+					type="text" 
+					class="default-input" 
+					placeholder="Название списка"
+					v-model="editTodoData.todoTitle"
+				/>
+				<input 
+					type="text" 
+					class="default-input" 
+					placeholder="Описание списка"
+					v-model="editTodoData.todoDesc"
+				/>
+				<input type="submit" class="btn btn_blue" value="Обновить">
+			</form>
+		</EditTodo>
+
 		<Loader v-if="loading" />
 		<section class="main" v-else>
 			<div class="container-fluid p-0">
@@ -21,7 +42,7 @@
 						<List :list="list" :loading="loading" @deleteList="deleteList" @changeList="changeList" @editList="editList" />
 					</div>
 					<div class="col-md-8 col-sm-7">
-						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateTodoProgress="updateTodoProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" />
+						<Todo :todo="todo" @deleteTodo="deleteTodo" @updateWarn="updateWarn" @updateTodoProgress="updateTodoProgress" @createSubtask="createSubtask" @deleteSubtask="deleteSubtask" @editTodo="editTodo" />
 					</div>
 				</div>
 			</div>
@@ -41,6 +62,7 @@
 	import List from '@/components/main/List'
 	import Todo from '@/components/main/Todo'
 	import EditList from '@/components/main/EditList'
+	import EditTodo from '@/components/main/EditTodo'
 
 	export default {
 		name: 'Home',
@@ -56,6 +78,15 @@
 				title: '',
 				listId: '',
 				listTitle: '',
+				index: '',
+				hidden: true
+			},
+			editTodoData: {
+				title: '',
+				listId: '',
+				todoId: '',
+				todoTitle: '',
+				todoDesc: '',
 				index: '',
 				hidden: true
 			}
@@ -79,15 +110,37 @@
 					hidden: false
 				}
 			},
+			editTodo(todoId, listId, title, description, index) {
+				this.editTodoData = {
+					title: `Редактирование дела "${title}"`,
+					todoTitle: title,
+					todoDesc: description,
+					listId,
+					todoId,
+					index,
+					hidden: false
+				}
+			},
 			closeEditList() {
 				this.editListData = {
 					title: '',
-					listId: null,
-					index: null,
+					listId: '',
+					index: '',
 					hidden: true
 				}
 			},
-			async updateData() {
+			closeEditTodo() {
+				this.editTodoData = {
+					title: '',
+					todoTitle: '',
+					todoDesc: '',
+					listId: '',
+					todoId: '',
+					index: '',
+					hidden: true
+				}
+			},
+			async updateListData() {
 				try {
 					const info = {
 						id: this.editListData.listId,
@@ -95,12 +148,24 @@
 					}
 					await this.$store.dispatch('updateListTitle', info)
 					this.list[this.editListData.index].title = info.title
-					console.log(this.list[this.editListData.index])
 					this.closeEditList()
 					this.$message('Список успешно обновлён!')
-				} catch(e) {
-					console.log(e)
-				}
+				} catch(e) {}
+			},
+			async updateTodoData() {
+				try {
+					const info = {
+						id: this.editTodoData.todoId,
+						listId: this.editTodoData.listId,
+						title: this.editTodoData.todoTitle,
+						description: this.editTodoData.todoDesc
+					}
+					await this.$store.dispatch('updateTodoData', info)
+					this.todo.list[this.editTodoData.index].title = info.title
+					this.todo.list[this.editTodoData.index].description = info.description
+					this.closeEditTodo()
+					this.$message('Дело успешно обновлено!')
+				} catch(e) {}
 			},
 			async addList(list) {
 				this.list.push(list)
@@ -272,7 +337,7 @@
 			}
 		},
 		components: {
-			List, Todo, Footer, EditList
+			List, Todo, Footer, EditList, EditTodo
 		}
 	}
 </script>
