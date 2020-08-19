@@ -3,7 +3,7 @@
 		<EditList v-model="editListData.hidden">
 			<a href="#" class="close" @click.prevent="closeEditList">Закрыть</a>
 			<h2>{{ editListData.title }}</h2>
-			<form @submit.prevent="updateData">
+			<form @submit.prevent="updateListData">
 				<input 
 					type="text" 
 					class="default-input" 
@@ -150,7 +150,9 @@
 					this.list[this.editListData.index].title = info.title
 					this.closeEditList()
 					this.$message('Список успешно обновлён!')
-				} catch(e) {}
+				} catch(e) {
+					console.log(e)
+				}
 			},
 			async updateTodoData() {
 				try {
@@ -217,28 +219,39 @@
 			},
 			async deleteTodo(listId, id, title) {
 				this.$prompt(`Удалить дело "${title}"?`, async () => {
-					const update = {
+					let update = {
 						id: listId,
 						progress: 0
 					}
 					try {
 						await this.$store.dispatch('deleteTodo', { listId, id })
-
 						for (let i = 0; i < this.todo.list.length; i++) {
 							if ( this.todo.list[i].id == id ) {
 								this.todo.list.splice(i, 1)
 							}
 						}
-						
-						if ( this.todo.list.length == 0 ) {
+						if ( this.todo.list.length == 0 ) {	// Изменение статуса выбранного списка
 							await this.$store.dispatch('updateListProgress', update)
 							for (let i = 0; i < this.list.length; i++) {
 								if ( this.list[i].id == this.todo.currentId ) {
 									this.list[i].progress = 0
 								}
 							}
-						}
-					} catch(e) {}
+						} else {
+							update.progress = 2
+							for (let i = 0; i < this.todo.list.length; i++) {
+								if ( !this.todo.list[i].progress ) {
+									update.progress = 1
+								}
+							}
+							await this.$store.dispatch('updateListProgress', update)
+							for (let i = 0; i < this.list.length; i++) {
+								if ( this.list[i].id == this.todo.currentId ) {
+									this.list[i].progress = update.progress
+								}
+							}
+						}	
+					} catch(e) { console.log(e) }
 					this.$message(`Дело "${title}" успешно удалено!`)
 				})
 			},
@@ -260,8 +273,7 @@
 							this.todo.list[i].progress = !this.todo.list[i].progress
 						}
 					}
-					let flag = true,
-						index
+					let flag = true
 					for (let i = 0; i < this.todo.list.length; i++) {
 						if ( !this.todo.list[i].progress ) {
 							flag = false
