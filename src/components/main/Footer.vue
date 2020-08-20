@@ -29,8 +29,8 @@
 			addList(list) {
 				this.$emit('addList', list)
 			},
-			addTodo(todo) {
-				this.$emit('addTodo', todo)
+			addTodo(todoItem) {
+				this.$emit('addTodo', todoItem)
 			}
 		},
 		components: {

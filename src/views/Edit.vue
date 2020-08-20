@@ -17,7 +17,6 @@
 							type="text" 
 							class="default-input" 
 							placeholder="Ваша фамилия" 
-							value="Шабалин"
 							v-model.trim="surname"
 							:class="{ invalid: ($v.surname.$dirty && !$v.surname.required) || ($v.surname.$dirty && !$v.surname.minLength) }"
 						>
@@ -56,14 +55,14 @@
 			    	this.$v.$touch()
 			       	return
 			    }
-			    const user = {
-			    	name: this.name,
-			    	surname: this.surname
-			    }
 			    try {
+			    	const user = {
+				    	name: this.name,
+				    	surname: this.surname
+				    }
 			    	await this.$store.dispatch('changeInfo', user)
-			    } catch(e) {}
-			    this.$message('Ваша информация успешно обновлена!')
+			    	this.$message('Ваша информация успешно обновлена!')
+			    } catch(e) {}	    
 			},
 			async deleteAll() {
 				this.$prompt(`Вы уверены, что хотите удалить все списки?`, async () => {

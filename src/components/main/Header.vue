@@ -11,7 +11,7 @@
 					</div>
 				</div>
 				<div class="col-2 d-flex justify-content-end">
-					<div class="header__humb" @click="$emit('openMenu')">
+					<div class="header__humb" :class="{ js_open: humb }" @click="openMenu">
 						<span></span>
 						<span></span>
 						<span></span>
@@ -28,8 +28,15 @@
 		data: () => ({
 			interval: null,
 			date: new Date(),
-			timeInterval: 360000
+			timeInterval: 36000,
+			humb: false
 		}),
+		methods: {
+			openMenu() {
+				this.humb = !this.humb
+				this.$emit('openMenu')
+			}
+		},
 		mounted() {
 			this.interval = setInterval(() => {
 				this.date = new Date()

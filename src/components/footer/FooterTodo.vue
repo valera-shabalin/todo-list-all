@@ -54,6 +54,10 @@
 			    	this.$v.$touch()
 			       	return
 			    }
+			    if ( !this.todo.currentId ) {
+			    	this.$message('Для начала выберите список!')
+			    	return
+			    }
 			    const info = {
 			    	title: this.title,
 			    	listId: this.todo.currentId,
@@ -63,12 +67,12 @@
 			    	date: new Date().toJSON()
 			    }
 			   	try {
-			    	const todo = await this.$store.dispatch('createTodo', info)
+			    	const todoItem = await this.$store.dispatch('createTodo', info)
 			    	this.title = ''
 			    	this.description = ''
 			    	warn: false
 			    	this.$v.$reset()
-			    	this.$emit('addTodo', todo)
+			    	this.$emit('addTodo', todoItem)
 			    } catch(e) {}
 			}
 		}

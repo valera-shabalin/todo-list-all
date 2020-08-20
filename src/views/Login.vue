@@ -2,14 +2,14 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-6">	
-				<form @submit.prevent="onSubmit">
+				<form @submit.prevent="login">
 					<span class="logo">Todo</span>
 					<input 
 						type="email" 
-						class="default-input user-email" 
+						class="default-input" 
 						placeholder="Ваш адрес электронной почты" 
 						v-model.trim="email" 
-						:class="{ invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email) }" 
+						:class="{ invalid: ($v.email.$dirty && !$v.email.required) || ($v.email.$dirty && !$v.email.email) }"
 					/>
 					<input 
 						type="password" 
@@ -57,7 +57,7 @@
 		}),
 		validations: {
 		    email: { email, required },
-		    password: { required, minLength: minLength(10) }
+		    password: { required, minLength: minLength(5) }
 	    },
 	    mounted() {
 	    	if ( this.$route.query.message ) {
@@ -65,16 +65,16 @@
 	    	}
 	    },
 		methods: {
-			async onSubmit() {
+			async login() {
 				if ( this.$v.$invalid ) {
 			    	this.$v.$touch()
 			       	return
 			    }
-			    const formData = {
-			    	email: this.email,
-			    	password: this.password
-			    }
 			    try {
+			    	const formData = {
+				    	email: this.email,
+				    	password: this.password
+				    }
 			    	await this.$store.dispatch('login', formData)
 			    	this.$router.push('/')
 			    } catch(e) {
