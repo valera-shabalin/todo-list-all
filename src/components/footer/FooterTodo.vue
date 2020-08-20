@@ -56,6 +56,7 @@
 			    }
 			    if ( !this.todo.currentId ) {
 			    	this.$message('Для начала выберите список!')
+			    	this.clearFields()
 			    	return
 			    }
 			    const info = {
@@ -68,12 +69,15 @@
 			    }
 			   	try {
 			    	const todoItem = await this.$store.dispatch('createTodo', info)
-			    	this.title = ''
-			    	this.description = ''
-			    	warn: false
+			    	this.clearFields()
 			    	this.$v.$reset()
 			    	this.$emit('addTodo', todoItem)
 			    } catch(e) {}
+			},
+			clearFields() {
+				this.title = ''
+		    	this.description = ''
+		    	this.warn = false
 			}
 		}
 	}
