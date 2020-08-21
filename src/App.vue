@@ -44,4 +44,9 @@
 		display: flex
 		justify-content: center
 		align-items: center
+
+	.main__list-search
+		margin-bottom: 15px
+		width: 100%
+
 </style>

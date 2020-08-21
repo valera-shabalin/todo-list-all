@@ -1,12 +1,20 @@
 <template>
 	<div class="main__list">
+		
+		<input 
+			type="text" 
+			class="default-input main__list-search" 
+			placeholder="Поиск"
+			v-model="search"
+		/>
+
 		<h2>Ваши списки дел</h2>
 
 		<span v-if="!list.length">У вас нет дел</span>
 
 		<div 
 			class="main__list-item"
-			v-for="(item, index) of list"
+			v-for="(item, index) of filteredLists"
 			:key="item.id"
 			:class="{ green: item.progress == 1, grey: item.progress == 2 }"
 			@click="$emit('changeList', item.id, index)" v-else>
@@ -30,6 +38,16 @@
 			list: {
 				type: Array,
 				default: []
+			}
+		},
+		data: () => ({
+			search: ''
+		}),
+		computed: {
+			filteredLists() {
+				return this.list.filter(item => {
+					return item.title.includes(this.search)
+				})
 			}
 		}
 	}
