@@ -105,8 +105,7 @@
 				this.editListData = {
 					title: `Редактирование списка "${title}"`,
 					listTitle: title,
-					listId,
-					index,
+					listId, index,
 					hidden: false
 				}
 			},
@@ -115,9 +114,7 @@
 					title: `Редактирование дела "${title}"`,
 					todoTitle: title,
 					todoDesc: description,
-					listId,
-					todoId,
-					index,
+					listId, todoId, index,
 					hidden: false
 				}
 			},
@@ -148,6 +145,7 @@
 					}
 					await this.$store.dispatch('updateListTitle', info)
 					this.list[this.editListData.index].title = info.title
+					this.todo.title = info.title
 					this.closeEditList()
 					this.$message('Список успешно обновлён!')
 				} catch(e) {}
@@ -286,12 +284,12 @@
 					this.updateListProgress(this.todo.currentId, update.progress)
 				} catch(e) {}
 			},
-			async changeList(id, index) { // Функция смены текущего списка
+			async changeList(id, title, index) { // Функция смены текущего списка
 				try {
 					/* Замена данных текущего списка */
 					this.todo.list = []
 					this.todo.currentId = id
-					this.todo.title = this.list[index].title
+					this.todo.title = title
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
 			},

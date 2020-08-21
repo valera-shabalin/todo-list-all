@@ -41,7 +41,7 @@
 			<div class="under-items">
 				<div 
 					class="item"
-					v-for="sub of item.subtasks"
+					v-for="(sub, index) of item.subtasks"
 					:key="sub.id">
 					<h3>{{ sub.title }}</h3>
 					<a href="#" class="item_btn del" @click.prevent="$emit('deleteSubtask', item.listId, item.id, sub.title, sub.id)">
