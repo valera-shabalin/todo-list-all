@@ -140,7 +140,7 @@
 					hidden: true
 				}
 			},
-			async updateListData() {
+			async updateListData() { // функция обновления данных списка
 				try {
 					const info = {
 						id: this.editListData.listId,
@@ -150,11 +150,9 @@
 					this.list[this.editListData.index].title = info.title
 					this.closeEditList()
 					this.$message('Список успешно обновлён!')
-				} catch(e) {
-					console.log(e)
-				}
+				} catch(e) {}
 			},
-			async updateTodoData() {
+			async updateTodoData() { // функция обновления данных задачи
 				try {
 					const info = {
 						id: this.editTodoData.todoId,
@@ -169,74 +167,70 @@
 					this.$message('Дело успешно обновлено!')
 				} catch(e) {}
 			},
-			async addList(list) {
+			async addList(list) { // функция добавления нового списка
 				this.list.push(list)
-				this.$message(`Список "${list.title}" успешно добавлен!`)
 				this.todo.title = list.title
 				this.todo.currentId = list.id
-				this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
-			},
-			async addTodo(todo) {
-				this.todo.list.push(todo)
-				const update = {
-					id: todo.listId,
-					progress: 1
-				}
 				try {
-					await this.$store.dispatch('updateListProgress', update)
-					for (let i = 0; i < this.list.length; i++) {
-						if ( this.list[i].id == this.todo.currentId ) {
-							this.list[i].progress = 1
-						}
-					}
+					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
+					this.$message(`Список "${list.title}" успешно добавлен!`)
 				} catch(e) {}
-				this.$message(`Дело "${todo.title}" успешно добавлено!`)
 			},
-			async deleteList(id, listTitle) {
+			async addTodo(todoItem) { // функция добавления задачи в текущий список
+				this.todo.list.push(todoItem)
+				try {
+					const update = {
+						id: todoItem.listId,
+						progress: 1
+					}
+					await this.$store.dispatch('updateListProgress', update)
+					this.updateListProgress(this.todo.currentId, 1)
+					this.$message(`Дело "${todo.title}" успешно добавлено!`)
+				} catch(e) {}
+			},
+			async deleteList(id, listTitle) { // функция для удаления списка
 				this.$prompt(`Удалить список "${listTitle}?"`, async () => {
 					try {
-						let title = ''
+						/* Удаление списка */
 						await this.$store.dispatch('deleteList', id)
 						for ( let i = 0; i < this.list.length; i++ ) {
 							if ( this.list[i].id == id ) {
-								title = this.list[i].title
 								this.list.splice(i, 1)
 							}
 						}
+						/* Переключение активного списка */
 						if ( this.list.length == 0 ) {
 							this.todo.title = '',
 							this.todo.currentId = ''
+							this.todo.list = []
 						} else {
 							this.todo.currentId = this.list[0].id
 							this.todo.title = this.list[0].title
 							this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 						}
+						/* Вывод сообщения об успехе */
 						this.$message(`Список "${listTitle}" успешно удалён!`)
-					} catch(e) {
-						console.log(e)
-					}
+					} catch(e) {}
 				})
 			},
-			async deleteTodo(listId, id, title) {
+			async deleteTodo(listId, id, title) { // функция для удаления задачи текущего списка
 				this.$prompt(`Удалить дело "${title}"?`, async () => {
-					let update = {
-						id: listId,
-						progress: 0
-					}
 					try {
+						/* Удаление элемента */
 						await this.$store.dispatch('deleteTodo', { listId, id })
 						for (let i = 0; i < this.todo.list.length; i++) {
 							if ( this.todo.list[i].id == id ) {
 								this.todo.list.splice(i, 1)
 							}
 						}
-						if ( this.todo.list.length == 0 ) {	// Изменение статуса выбранного списка
+						/* Обновление состояния текущего списка */
+						let update = {
+							id: listId,
+							progress: 0
+						}
+						if ( this.todo.list.length == 0 ) {
 							await this.$store.dispatch('updateListProgress', update)
-							for (let i = 0; i < this.list.length; i++) {
-								if ( this.list[i].id == this.todo.currentId ) {
-									this.list[i].progress = 0
-								}
-							}
+							this.updateListProgress(this.todo.currentId, 0)
 						} else {
 							update.progress = 2
 							for (let i = 0; i < this.todo.list.length; i++) {
@@ -245,17 +239,21 @@
 								}
 							}
 							await this.$store.dispatch('updateListProgress', update)
-							for (let i = 0; i < this.list.length; i++) {
-								if ( this.list[i].id == this.todo.currentId ) {
-									this.list[i].progress = update.progress
-								}
-							}
-						}	
-					} catch(e) { console.log(e) }
-					this.$message(`Дело "${title}" успешно удалено!`)
+							this.updateListProgress(this.todo.currentId, update.progress)
+						}
+						/* Вывод сообщения об успехе */
+						this.$message(`Дело "${title}" успешно удалено!`)
+					} catch(e) {}
 				})
 			},
-			async updateWarn(listId, id, warn) {
+			async updateListProgress(id, progress) { // функция для обновления прогресса списка
+				for (let i = 0; i < this.list.length; i++) {
+					if ( this.list[i].id == id ) {
+						this.list[i].progress = progress
+					}
+				}
+			},
+			async updateWarn(listId, id, warn) { // функция для обновления важности задачи
 				try {
 					await this.$store.dispatch('switchTodoWarn', { listId, id, warn })
 					for (let i = 0; i < this.todo.list.length; i++) {
@@ -265,58 +263,42 @@
 					}
 				} catch(e) {}
 			},
-			async updateTodoProgress(listId, id, progress) {
+			async updateTodoProgress(listId, id, progress) { // функция для обновления прогресса задачи
 				try {
+					/* Обновление прогресса задачи */
 					await this.$store.dispatch('switchTodoProgress', { listId, id, progress })
 					for (let i = 0; i < this.todo.list.length; i++) {
 						if ( this.todo.list[i].id == id ) {
 							this.todo.list[i].progress = !this.todo.list[i].progress
 						}
 					}
-					let flag = true
+					/* Обновление прогресса текущего списка */
+					let update = {
+						id: listId,
+						progress: 2
+					}
 					for (let i = 0; i < this.todo.list.length; i++) {
 						if ( !this.todo.list[i].progress ) {
-							flag = false
+							update.progress = 1
 						}
 					}
-					if ( flag ) {
-						const update = {
-							id: listId,
-							progress: 2
-						}
-						await this.$store.dispatch('updateListProgress', update)
-						for (let i = 0; i < this.list.length; i++) {
-							if ( this.list[i].id == listId ) {
-								this.list[i].progress = 2
-							}
-						}
-					} else {
-						const update = {
-							id: listId,
-							progress: 1
-						}
-						await this.$store.dispatch('updateListProgress', update)
-						for (let i = 0; i < this.list.length; i++) {
-							if ( this.list[i].id == listId ) {
-								this.list[i].progress = 1
-							}
-						}
-					}
-				} catch(e) {
-					console.log(e)
-				}
+					await this.$store.dispatch('updateListProgress', update)
+					this.updateListProgress(this.todo.currentId, update.progress)
+				} catch(e) {}
 			},
-			async changeList(id, index) {
+			async changeList(id, index) { // Функция смены текущего списка
 				try {
-					this.todo.list = null
+					/* Замена данных текущего списка */
+					this.todo.list = []
 					this.todo.currentId = id
 					this.todo.title = this.list[index].title
 					this.todo.list = await this.$store.dispatch('fetchTodo', this.todo.currentId)
 				} catch(e) {}
 			},
-			async createSubtask(listId, todoId) {
+			async createSubtask(listId, todoId) { // Функция для добавления подзадачи
 				this.$subtask(`Создать подзадачу?`, async (title) => {
 					try {
+						/* Добавление подзадачи */
 						const info = {
 							title, listId, todoId,
 							date: new Date().toJSON()
@@ -327,13 +309,15 @@
 								this.todo.list[i].subtasks.push(subtask)
 							}
 						}
+						/* Вывод сообщения об успехе */
 						this.$message(`Подзадача "${subtask.title}" успешно добавлена!`)
 					} catch(e) {}
 				})
 			},
-			async deleteSubtask(listId, todoId, title, id) {
+			async deleteSubtask(listId, todoId, title, id) { // функция для удаления подзадачи
 				this.$prompt(`Удалить подзадачу "${title}"`, async () => {
 					try {
+						/* Удаление подзадачи */
 						await this.$store.dispatch('deleteSubtask', { listId, todoId, id })
 						for (let i = 0; i < this.todo.list.length; i++) {
 							if ( this.todo.list[i].id == todoId ) {
@@ -344,6 +328,8 @@
 								}
 							}
 						}
+						/* Вывод сообщения об успехе */
+						this.$message(`Подзадача "${subtask.title}" успешно удалена!`)
 					} catch(e) {}
 				})
 			}
